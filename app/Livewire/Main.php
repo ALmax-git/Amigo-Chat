@@ -9,6 +9,7 @@ use Livewire\Component;
 class Main extends Component
 {
     public $friends, $friend;
+    public $messages = [];
     public function mount()
     {
         $this->friends = User::all();
