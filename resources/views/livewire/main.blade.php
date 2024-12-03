@@ -100,7 +100,7 @@
                 <ul class="menu-inner py-1">
                   @foreach ($friends as $Amigo)
                   <li class="menu-item {{---active--}}">
-                    <div class="menu-link" wire:click='toggle_chat_box({{ $Amigo->id }})'>
+                    <div class="menu-link" wire:click='toggleChatBox({{ $Amigo->id }})'>
                       <i class="menu-icon tf-icons bx bx-home-circle"></i>
                       <div data-i18n="Analytics">{{ $Amigo->name }}</div>
                     </div>
@@ -140,62 +140,55 @@
       <livewire:header />
       <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
-          <div class="row">
-            <div class="col-md-6 col-lg-12">
-              <div class="card overflow-hidden mb-4" style="height: 60vh">
-
+    <div class="row">
+        <div class="col-md-6 col-lg-12">
+            <div class="card overflow-hidden mb-4" style="height: 60vh">
                 <div class="card-body" id="vertical-example">
-                  <div class="card">
-                    <div class="card-body msg_card_body">
-                      @if (isset($messages))
-
-@forelse ($messages as $message) {{-- Messages Here --}}
-
-                      <div class="d-flex justify-content-start mb-4">
-                        <div class="img_cont_msg">
-                          <img width="40" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
-                            class="rounded-circle user_img_msg">
+                    <div class="card" style="overflow-y: auto; height: 300px; border: 1px solid #ccc;">
+                        <div class="card-body msg_card_body">
+                            @forelse ($messages as $message)
+                                @if ($message->sender_id === Auth::id())
+                                    <!-- Outgoing Message -->
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            {{ $message->content }}
+                                            <span class="msg_time_send">{{ $message->created_at->format('g:i A, M d') }}</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <!-- Incoming Message -->
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <div class="img_cont_msg">
+                                            <img width="40" src="https://via.placeholder.com/40" class="rounded-circle user_img_msg" alt="Friend Image">
+                                        </div>
+                                        <div class="msg_cotainer">
+                                            {{ $message->content }}
+                                            <span class="msg_time">{{ $message->created_at->format('g:i A, M d') }}</span>
+                                        </div>
+                                    </div>
+                                @endif
+                            @empty
+                                <p>No messages yet. Say Hi to {{ $friend->name }}!</p>
+                            @endforelse
                         </div>
-                        <div class="msg_cotainer">
-                          {{ $message->content }}
-                          <span class="msg_time">8:40 AM, Today</span>
-                        </div>
-                      </div>
-
-                      <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send">
-                          Hi Khalid i am good tnx how about you?
-                          <span class="msg_time_send">8:55 AM, Today</span>
-                        </div>
-                        <div class="img_cont_msg">
-                          <img width="40"
-                            src=""
-                            class="rounded-circle user_img_msg">
-                        </div>
-                      </div>
-                      @empty
-                      <h1> empty </h1>
-@endforelse
-                      @endif
-
                     </div>
-
-                  </div>
                 </div>
-              </div>
             </div>
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Hello -- World! {{ $friend->name }}"
-                aria-label="Recipient's username with two button addons">
-              <button class="btn btn-light" type="button"><span class="text-primary"><i
-                    class="fas fa-location-arrow"></i></span></button>
-              <label for="upload" class="btn btn-light text-info" tabindex="0">
+        </div>
+
+        <div class="input-group">
+            <input type="text" class="form-control" wire:model="new_text_message" placeholder="Hello {{ $friend->name }}">
+            <button class="btn btn-light" wire:click="sendMessage">
+                <span class="text-primary"><i class="fas fa-location-arrow"></i></span>
+            </button>
+            <label for="upload" class="btn btn-light text-info" tabindex="0">
                 <i class="fas fa-paperclip"></i>
                 <input type="file" id="upload" hidden />
-              </label>
-            </div>
-          </div>
+            </label>
         </div>
+    </div>
+</div>
+
 
         <footer class="content-footer footer bg-footer-theme">
           <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
