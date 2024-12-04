@@ -2,7 +2,7 @@
   <div class="layout-container">
     <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
       <div class="app-brand demo">
-        <a href="index.html" class="app-brand-link">
+        <a href="/" class="app-brand-link">
           <span class="app-brand-text">Amigo Chat</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -14,63 +14,7 @@
         <div class="navbar-nav align-items-center">
             <div class="nav-item d-flex align-items-center">
             <i class="bx bx-search fs-4 lh-0"></i>
-            <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
-            <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- User Dropdown -->
-                <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <div class="avatar avatar-online">
-                    <img src="build/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                    </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                    <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar avatar-online">
-                                <img src="build/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <span class="fw-semibold d-block">{{ $friend->name }}</span>
-                                <small class="text-muted">Admin</small>
-                            </div>
-                        </div>
-                    </a>
-                    </li>
-                    <li>
-                    <div class="dropdown-divider"></div>
-                    </li>
-                    <li><a class="dropdown-item" href="#"><i class="bx bx-user me-2"></i><span class="align-middle">My
-                        Profile</span></a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bx bx-cog me-2"></i><span
-                        class="align-middle">Settings</span></a></li>
-                    <li>
-                    <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                        <span class="flex-grow-1 align-middle">Billing</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
-                    </a>
-                    </li>
-                    <li>
-                    <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                    <form method="POST" action="{{ route('logout') }}" class="dropdown-item">
-                        @csrf
-                        <button type="submit" class="btn btn-light">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
-                        </button>
-                    </form>
-                    </li>
-                </ul>
-                </li>
-                <!--/ User -->
-            </ul>
+            <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />           
             </div>
         </div>
       <br>
@@ -99,9 +43,9 @@
               <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
                 <ul class="menu-inner py-1">
                   @foreach ($friends as $Amigo)
-                  <li class="menu-item {{---active--}}">
-                    <div class="menu-link" wire:click='toggleChatBox({{ $Amigo->id }})'>
-                      <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                  <li class="w-100 mb-1">
+                    <div class="menu-link btn btn-outline-info" wire:click='toggleChatBox({{ $Amigo->id }})'>
+                      <i class="menu-icon tf-icons bx bx-user-circle"></i>
                       <div data-i18n="Analytics">{{ $Amigo->name }}</div>
                     </div>
                   </li>
@@ -140,45 +84,45 @@
       <livewire:header />
       <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row">
-        <div class="col-md-6 col-lg-12">
-            <div class="card overflow-hidden mb-4" style="height: 60vh">
-                <div class="card-body" id="vertical-example">
-                    <div class="card" style="overflow-y: auto; height: 300px; border: 1px solid #ccc;">
-                        <div class="card-body msg_card_body">
-                            @forelse ($messages as $message)
-                                @if ($message->sender_id === Auth::id())
-                                    <!-- Outgoing Message -->
-                                    <div class="d-flex justify-content-end mb-4">
-                                        <div class="msg_cotainer_send">
-                                            {{ $message->content }}
-                                            <span class="msg_time_send">{{ $message->created_at->format('g:i A, M d') }}</span>
-                                        </div>
-                                    </div>
-                                @else
-                                    <!-- Incoming Message -->
-                                    <div class="d-flex justify-content-start mb-4">
-                                        <div class="img_cont_msg">
-                                            <img width="40" src="https://via.placeholder.com/40" class="rounded-circle user_img_msg" alt="Friend Image">
-                                        </div>
-                                        <div class="msg_cotainer">
-                                            {{ $message->content }}
-                                            <span class="msg_time">{{ $message->created_at->format('g:i A, M d') }}</span>
-                                        </div>
-                                    </div>
-                                @endif
-                            @empty
-                                <p>No messages yet. Say Hi to {{ $friend->name }}!</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+          <form wire:submit="sendMessage" class="row">
+              <div class="col-md-6 col-lg-12">
+                  {{-- <div class="card overflow-hidden mb-4" style="height: 60vh"> --}}
+                      {{-- <div class="card-body" id="vertical-example"> --}}
+                          <div class="card" style="overflow-y: auto; height: 65vh; border: 1px solid #ccc;">
+                              <div class="card-body msg_card_body" wire:poll='loadMessages'>
+                                  @forelse ($messages as $message)
+                                      @if ($message->sender_id === Auth::id())
+                                          <!-- Outgoing Message -->
+                                          <div class="d-flex justify-content-end mb-4">
+                                              <div class="w-50 msg_cotainer_send p-2" style="border: 1px solid black; border-radius: 5px; text-align: right">
+                                                 {{ $message->content }}<br>
+                                                  <small class="msg_time_send">{{ $message->created_at->format('g:i A, M d') }}</small>
+                                              </div>
+                                          </div>
+                                      @else
+                                          <!-- Incoming Message -->
+                                          <div class="d-flex justify-content-start  mb-4">
+                                              {{-- <div class="img_cont_msg">
+                                                  <img width="40" src="https://via.placeholder.com/40" class="rounded-circle user_img_msg" alt="Friend Image">
+                                              </div> --}}
+                                              <div class="w-50 msg_cotainer p-2" style="border: 1px solid black; border-radius: 5px;">
+                                                 {{ $message->content }}<br> 
+                                                  <small class="msg_time">{{ $message->created_at->format('g:i A, M d') }}</small>
+                                              </div>
+                                          </div>
+                                      @endif
+                                  @empty
+                                      <p>No messages yet. Say Hi to {{ $friend->name }}!</p>
+                                  @endforelse
+                              </div>
+                          </div>
+                      {{-- </div>
+                  </div> --}}
+              </div>
 
         <div class="input-group">
             <input type="text" class="form-control" wire:model="new_text_message" placeholder="Hello {{ $friend->name }}">
-            <button class="btn btn-light" wire:click="sendMessage">
+            <button type="submit" class="btn btn-outline-success">
                 <span class="text-primary"><i class="fas fa-location-arrow"></i></span>
             </button>
             <label for="upload" class="btn btn-light text-info" tabindex="0">
@@ -186,7 +130,7 @@
                 <input type="file" id="upload" hidden />
             </label>
         </div>
-    </div>
+    </form>
 </div>
 
 
